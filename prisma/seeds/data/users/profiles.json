@@ -1,0 +1,18 @@
+[
+    {
+        "bio": "Profile 1",
+        "avatar": "https://randomuser.me/api/portraits/women/8.jpg",
+        "userId": 3
+    },
+    {
+        "bio": "Profile 2",
+        "avatar": "https://randomuser.me/api/portraits/men/9.jpg",
+        "userId": 5
+    },
+    {
+        "bio": "Profile 3",
+        "avatar": "https://randomuser.me/api/portraits/men/10.jpg",
+        "userId": 7
+    }
+    
+]

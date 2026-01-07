@@ -1,0 +1,23 @@
+services:
+  api-tests:
+    image: schemathesis/schemathesis:stable
+    container_name: schemathesis-test-runner
+    command: >
+      run ${SCHEMATHESIS_SCHEMA_URL} 
+      --url ${SCHEMATHESIS_BASE_URL}
+      --workers ${SCHEMATHESIS_WORKERS}
+      --wait-for-schema ${SCHEMATHESIS_MAX_SCHEMA_WAIT}
+      --max-failures ${SCHEMATHESIS_MAX_FAILURES}
+      --max-response-time ${SCHEMATHESIS_MAX_API_RESPONSE_TIME}
+      --max-examples ${SCHEMATHESIS_MAX_EXAMPLES}
+    networks:
+      - ${NETWORK_NAME:-skeleton-network}
+    volumes:
+      - ./config/schemathesis.toml:/app/schemathesis.toml
+      - ./${SCHEMATHESIS_TEST_REPORTS_DIR}:/app/test-reports
+    restart: "no"
+
+networks:
+  skeleton-network:
+    name: ${NETWORK_NAME:-skeleton-network}
+    external: true

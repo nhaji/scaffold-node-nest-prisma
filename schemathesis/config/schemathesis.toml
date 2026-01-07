@@ -1,0 +1,37 @@
+continue-on-failure = true
+
+[output.sanitization]
+keys-to-sanitize = ["password", "token", "auth"]
+sensitive-markers = ["secret", "auth", "key"]
+replacement = "***REDACTED***"
+
+[phases]
+enabled = false
+examples.enabled = true
+coverage.enabled = false
+fuzzing.enabled = false
+stateful.enabled = false
+
+[checks]
+enabled = true
+
+[generation]
+mode = "all"
+deterministic = true
+
+[reports]
+directory = "test-reports"
+
+[reports.junit]
+enabled = true
+
+[reports.vcr]
+enabled = true
+
+[reports.har]
+enabled = true
+
+
+
+
+

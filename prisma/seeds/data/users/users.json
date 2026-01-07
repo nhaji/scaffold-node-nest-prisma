@@ -1,0 +1,51 @@
+[
+    {
+        "email": "admin@mail.com",
+        "name": "System Admin",
+        "password": "$2b$10$hashedpassword123",
+        "role": "ADMIN",
+        "isActive": true
+    },
+    {
+        "email": "moderator@mail.com",
+        "name": "Content Moderator",
+        "password": "$2b$10$hashedpassword123",
+        "role": "MODERATOR",
+        "isActive": true
+    },
+    {
+        "email": "mohammed@mail.com",
+        "name": "User 3",
+        "password": "$2b$10$hashedpassword123",
+        "role": "AUTHOR",
+        "isActive": true
+    },
+    {
+        "email": "fatima@mail.com",
+        "name": "User 4",
+        "password": "$2b$10$hashedpassword123",
+        "role": "AUTHOR",
+        "isActive": true
+    },
+    {
+        "email": "youssef@mail.com",
+        "name": "User 5",
+        "password": "$2b$10$hashedpassword123",
+        "role": "AUTHOR",
+        "isActive": true
+    },
+    {
+        "email": "aicha@mail.com",
+        "name": "User 6",
+        "password": "$2b$10$hashedpassword123",
+        "role": "AUTHOR",
+        "isActive": true
+    },
+    {
+        "email": "ibrahim@mail.com",
+        "name": "User 7",
+        "password": "$2b$10$hashedpassword123",
+        "role": "AUTHOR",
+        "isActive": true
+    }
+]

@@ -1,0 +1,64 @@
+// User Module
+// Models: User, Profile
+// Enums: UserRole
+
+// Enum for user roles
+enum UserRole {
+  USER
+  ADMIN
+  MODERATOR
+  AUTHOR
+}
+
+// Users
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  password  String   @db.VarChar(255)
+  isActive  Boolean  @default(true)
+  role      UserRole @default(USER)
+  profile   Profile?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  comments      Comment[] 
+  
+  // Existing Self-referencing Audit Fields (User created/updated by another User)
+  createdById Int?
+  createdBy   User? @relation("UserCreatedByUser", fields: [createdById], references: [id])
+
+  updatedById Int?
+  updatedBy   User? @relation("UserUpdatedByUser", fields: [updatedById], references: [id])
+  
+  // Inverse relations for User self-auditing
+  createdUsers User[] @relation("UserCreatedByUser")
+  updatedUsers User[] @relation("UserUpdatedByUser")
+
+  // Inverse Audit Relations for ALL other models
+  createdProfiles         Profile[]           @relation("ProfileCreatedByUser")
+  updatedProfiles         Profile[]           @relation("ProfileUpdatedByUser")
+  createdComments         Comment[]           @relation("CommentCreatedByUser")
+  updatedComments         Comment[]           @relation("CommentUpdatedByUser")
+  
+  @@map("users")
+  @@index([email])
+}
+
+// User profile (one-to-one)
+model Profile {
+  id        Int     @id @default(autoincrement())
+  bio       String?
+  avatar    String?
+  userId    Int     @unique
+  user      User    @relation(fields: [userId], references: [id])
+  
+  // AUDIT FIELDS
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdById Int?
+  createdBy   User? @relation("ProfileCreatedByUser", fields: [createdById], references: [id])
+  updatedById Int?
+  updatedBy   User? @relation("ProfileUpdatedByUser", fields: [updatedById], references: [id])
+  
+  @@map("profiles")
+}

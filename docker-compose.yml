@@ -1,0 +1,63 @@
+services:
+
+  skeleton-nnp-server:
+    build:
+      context: .
+      args:
+        - NODE_ENV=${NODE_ENV:-production} 
+        - APP_USER=${APP_USER}
+        - APP_WORKDIR=${APP_WORKDIR}
+        - LOG_DIR=${LOG_DIR}
+        - PORT=${PORT}
+        - HEALTH_CHECK_ENDPOINT=${HEALTH_CHECK_ENDPOINT}
+        - PRISMA_DUMMY_DATABASE_URL=${PRISMA_DUMMY_DATABASE_URL}
+        - PRISMA_CONFIG=${PRISMA_CONFIG}
+        - PRISMA_SCHEMA=${PRISMA_SCHEMA}
+        - PRISMA_MIGRATIONS_PATH=${PRISMA_MIGRATIONS_PATH}
+    hostname: ${SERVER_HOST_NAME}
+    environment:
+      DATABASE_URL: ${PRISMA_DATABASE_URL}
+      NODE_ENV: ${NODE_ENV:-production} 
+    ports:
+      - "${EXPOSED_PORT}:${PORT}"
+    volumes:
+      - ./${LOG_DIR}:${APP_WORKDIR}/${LOG_DIR}
+    depends_on:
+      skeleton-nnp-db:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD",  "wget", "-q", "--spider", "http://localhost:${PORT}${HEALTH_CHECK_ENDPOINT}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - ${NETWORK_NAME:-skeleton-network}
+    restart: unless-stopped
+  
+  skeleton-nnp-db:
+    image: postgres:18-alpine
+    hostname: ${DB_HOST_NAME}
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${EXPOSED_DB_PORT}:${DB_PORT}"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+    networks:
+      - ${NETWORK_NAME:-skeleton-network}
+    restart: unless-stopped
+
+volumes:
+  postgres_data: 
+
+networks:
+  skeleton-network:
+    name: ${NETWORK_NAME:-skeleton-network}
+    external: true
